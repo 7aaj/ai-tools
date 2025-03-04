@@ -21,7 +21,7 @@ const toolUrls = {
   },
   beamCounter: {
     name: "Beam Counter",
-    url: "/#beam-counter",
+    url: "/beam-counter",
   },
 };
 
