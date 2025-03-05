@@ -64,9 +64,6 @@ const Header = () => {
             {item}
           </button>
         ))}
-        <button className="px-6 py-3 text-base font-semibold tracking-wider leading-6 text-white bg-[#f02432] rounded-lg cursor-pointer">
-          Contact Us
-        </button>
       </nav>
 
       {/* Mobile menu button - hidden on desktop */}

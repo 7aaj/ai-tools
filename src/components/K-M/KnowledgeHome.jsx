@@ -16,6 +16,7 @@ import * as React from "react";
 import { useState, useCallback } from "react";
 import { motion } from "motion/react";
 import { useDropzone } from "react-dropzone";
+import axios from "axios";
 
 // PDF Icon Component
 const PdfIcon = () => (
@@ -77,11 +78,37 @@ const LogoSection = () => (
 // File Upload Section Component
 const UploadSection = () => {
   const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadedFileId, setUploadedFileId] = useState(null);
+  const [error, setError] = useState(null);
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles) => {
     const uploadedFile = acceptedFiles[0];
-    if (uploadedFile) {
-      setFile(uploadedFile);
+    if (!uploadedFile) return;
+
+    setFile(uploadedFile);
+    setUploading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+
+      const response = await axios.post(
+        "http://18.220.79.100:5002/upload",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response.status === 200) {
+        setUploadedFileId(response.data.file_id || "uploaded");
+      }
+    } catch (err) {
+      setError("Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
     }
   }, []);
 
@@ -94,7 +121,6 @@ const UploadSection = () => {
   return (
     <section className="mt-16 max-sm:mt-8">
       <div className="flex gap-4 items-center mb-8">
-        <PdfIcon />
         <h2 className="text-lg font-medium text-zinc-700">
           Upload PDF files for Q&A
         </h2>
@@ -106,25 +132,30 @@ const UploadSection = () => {
         }`}
       >
         <input {...getInputProps()} />
-        <div className="flex flex-col gap-2 items-center">
-          <p className="text-base text-center text-black">
-            {file ? file.name : "Drag and drop files here"}
-          </p>
-          <p className="text-xs text-stone-500">Supported formats: PDF</p>
-          <button className="px-4 py-2.5 mt-5 text-xs font-medium text-white bg-gray-600 rounded cursor-pointer border-[none]">
-            Browse file
-          </button>
-        </div>
+        <p className="text-base text-center text-black">
+          {file ? file.name : "Drag and drop files here"}
+        </p>
+        <button className="px-4 py-2.5 mt-5 text-xs font-medium text-white bg-gray-600 rounded cursor-pointer border-[none]">
+          Browse file
+        </button>
       </div>
+
+      {/* File Info Bar */}
       {file && (
-        <div className="mt-4 p-4 border rounded bg-gray-50 w-[262px] max-md:w-full">
-          <h3 className="text-sm font-medium">File Details:</h3>
-          <p className="text-xs text-zinc-700">Name: {file.name}</p>
-          <p className="text-xs text-zinc-700">
-            Size: {(file.size / 1024).toFixed(2)} KB
-          </p>
-          <p className="text-xs text-zinc-700">Type: {file.type}</p>
+        <div className="mt-4 flex items-center bg-gray-100 p-3 rounded-lg shadow-sm">
+          <PdfIcon />
+          <div className="ml-3">
+            <p className="text-sm font-medium text-black">{file.name}</p>
+            <p className="text-xs text-zinc-600">
+              {Math.round(file.size / 1024)} KB - PDF Document
+            </p>
+          </div>
         </div>
+      )}
+      {uploading && <p className="mt-2 text-blue-500">Uploading...</p>}
+      {error && <p className="mt-2 text-red-500">{error}</p>}
+      {uploadedFileId && (
+        <p className="mt-2 text-green-500">Upload successful!</p>
       )}
     </section>
   );
@@ -143,7 +174,7 @@ const GuidedTourDropdown = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="w-[700px] max-md:w-full rounded-lg border border-solid border-neutral-400 cursor-pointer">
+    <div className="w-[700px] max-md:w-full rounded-lg border border-solid border-neutral-400 mb-3 mt-1">
       {/* Toggle Button */}
       <div
         className="flex justify-between items-center px-4 py-3.5 h-11 text-xs text-black "
@@ -188,43 +219,59 @@ const GuidedTourDropdown = () => {
 // Question Section Component
 const QuestionSection = () => {
   const [question, setQuestion] = useState("");
-  const [canAsk, setCanAsk] = useState(false);
+  const [answers, setAnswers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleQuestionChange = useCallback((e) => {
-    setQuestion(e.target.value);
-    setCanAsk(e.target.value.trim().length > 0);
-  }, []);
+  const handleAskQuestion = async () => {
+    if (!question.trim()) return;
 
-  const handleAskQuestion = useCallback(() => {
-    if (canAsk) {
-      // Handle question submission logic here
-      console.log("Question submitted:", question);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post("http://18.220.79.100:5002/ask", {
+        question,
+      });
+
+      setAnswers((prev) => [
+        ...prev,
+        { question, answer: response.data.message },
+      ]);
+      setQuestion("");
+    } catch (err) {
+      setError("Failed to fetch answer. Please try again.");
+    } finally {
+      setLoading(false);
     }
-  }, [canAsk, question]);
+  };
 
   return (
     <section className="w-[700px] max-md:w-full">
-      <label
-        htmlFor="question-textarea"
-        className="mb-4 text-base text-neutral-700 block"
-      >
+      <label className="mb-4 text-base text-neutral-700 block">
         Ask a Question related to your document:
       </label>
+      {error && <p className="mt-2 text-red-500">{error}</p>}
+      <div className="my-4 p-4 border rounded bg-gray-50 max-h-96 min-h-96 overflow-y-auto">
+        {answers.map((entry, index) => (
+          <div key={index} className="mb-4">
+            <h3 className="text-sm font-medium">Q: {entry.question}</h3>
+            <p className="text-xs text-zinc-700">A: {entry.answer}</p>
+          </div>
+        ))}
+      </div>
       <textarea
-        id="question-textarea"
-        className="mb-5 w-full rounded-xl border border-solid bg-stone-50 border-zinc-300 h-[158px] max-sm:h-[120px] p-3 resize-none"
+        className="mb-5 w-full rounded-xl border border-solid bg-stone-50 border-zinc-300 h-[158px] p-3 resize-none"
         value={question}
-        onChange={handleQuestionChange}
+        onChange={(e) => setQuestion(e.target.value)}
         placeholder="Type your question here..."
       />
       <button
-        className={`px-4 py-2.5 text-xs font-medium text-white bg-gray-600 rounded cursor-pointer border-[none] ${
-          canAsk ? "" : "opacity-50"
-        }`}
+        className="px-4 py-2.5 text-xs font-medium text-white bg-gray-600 rounded cursor-pointer border-[none]"
         onClick={handleAskQuestion}
-        disabled={!canAsk}
+        disabled={!question}
       >
-        Ask
+        {loading ? "Asking..." : "Ask"}
       </button>
     </section>
   );
@@ -233,7 +280,7 @@ const QuestionSection = () => {
 // Main Content Component
 const MainContent = () => (
   <main className="flex-1 p-10 max-md:p-5">
-    <h2 className="mx-0 mt-16 mb-8 text-3xl font-medium text-black max-sm:text-2xl max-sm:text-center">
+    <h2 className="mb-auto text-3xl font-medium text-black max-sm:text-2xl max-sm:text-center">
       Fast AI Question Answer Powered by OHT
     </h2>
     <QuestionSection />
@@ -246,7 +293,9 @@ function DocuWhiz() {
     <>
       <div className="flex min-h-screen bg-white max-md:flex-col">
         <Sidebar />
-        <MainContent />
+        <div className="h-full mt-auto">
+          <MainContent />
+        </div>
         <GuidedTourDropdown />
       </div>
     </>

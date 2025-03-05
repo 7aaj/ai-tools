@@ -19,77 +19,78 @@ const OHTAITools = () => {
     },
     {
       icon: "arrows-right-left",
-      title: "Seamless Workflow Integration",
+      title: "Intelligent Chatbot Assistance",
       description:
-        "Easily integrates with existing business systems, streamlining document management and improving efficiency.",
+        "Ask questions about your uploaded files, and get instant, AI-driven responses for quick insights.",
     },
     {
       icon: "category",
-      title: "Smart Categorization & Organization",
+      title: "Multi-Type File Support",
       description:
-        "Automatically classifies, sorts, and processes documents, saving time and enhancing productivity.",
+        "Our AI engine supports multiple file formats for seamless processing and extraction.",
     },
   ];
 
   const salesCoachFeatures = [
     {
       icon: "bulb",
-      title: "AI-Driven Innovation",
+      title: "Realistic AI Sales Conversations",
       description:
-        "Harness the power of AI to drive innovation, transforming your business operations and enhancing decision-making processes.",
+        "Engage in lifelike sales calls with AI, practicing responses, handling objections, and refining your pitch in a risk-free environment.",
     },
     {
       icon: "chart-dots",
-      title: "Data-Driven Project Management",
+      title: "Performance Ranking & Feedback",
       description:
-        "Leverage AI insights to optimize project outcomes and ensure timely, data-backed decision-making at every step.",
+        "Get a detailed evaluation after each session, with a ranking based on conversation flow, persuasion skills, and closing techniques.",
     },
     {
       icon: "plug-connected",
-      title: "Seamless Integration",
+      title: "Body Language Analysis",
       description:
-        "Easily integrate AI into your existing systems, improving efficiency and streamlining processes for maximum impact.",
+        "AI evaluates your gestures, posture, and facial expressions to provide feedback on your nonverbal communication.",
     },
   ];
 
   const knowledgeManagementFeatures = [
     {
       icon: "bulb",
-      title: "AI-Driven Innovation",
+      title: "Instant AI Assistance",
       description:
-        "Harness the power of AI to drive innovation, transforming your business operations and enhancing decision-making processes.",
+        "Ask questions about your files, and get precise, AI-driven responses in seconds.",
     },
     {
       icon: "chart-dots",
-      title: "Data-Driven Project Management",
+      title: "Smart Data Extraction",
       description:
-        "Leverage AI insights to optimize project outcomes and ensure timely, data-backed decision-making at every step.",
+        "Automatically process and extract key insights from sales documents for quick access.",
     },
     {
       icon: "plug-connected",
-      title: "Seamless Integration",
+      title: "Multilingual Support",
       description:
-        "Easily integrate AI into your existing systems, improving efficiency and streamlining processes for maximum impact.",
+        "Process and extract information from documents in multiple languages with AI-powered accuracy. Seamlessly handle diverse files without language barriers.",
     },
   ];
 
   const beamCounterFeatures = [
     {
       icon: "camera",
-      title: "Metal Detection via Camera & AI",
+      title: "AI-Powered Beam Detection",
       description:
-        "Uses computer vision and AI to recognize and count metal beams, rebars, or other construction materials.",
+        "Automatically detects and counts beams in any uploaded image with high accuracy.",
     },
     {
       icon: "magnet",
-      title: "Magnetic Sensor Support",
-      description: "Uses the phone's magnetometer to detect metal presence",
+      title: "Instant Results",
+      description:
+        "Get fast and precise beam counts in seconds—no manual counting needed.",
     },
     {
       icon: "list-numbers",
-      title: "Auto Counting & Categorization",
+      title: "Smart Image Analysis",
       description:
-        "Differentiates between types of metal (beams, rebars, etc.) and provides an automatic count.",
+        "Processes various image types and adjusts to different angles and lighting for reliable detection.",
     },
   ];
 
@@ -111,7 +112,7 @@ const OHTAITools = () => {
         url={toolUrls.zoomAssistant.url}
         id="zoom-assistant"
         title="Zoom AI assistant"
-        description="The Zoom AI assistant is a zoom plugin includes an AI chat within Zoom meetings, providing real-time interaction along with AI-generated suggested questions relevant to the discussion."
+        description="Enhance your interviews with real-time AI-suggested questions. Our assistant listens, analyzes, and provides smart follow-ups. Upload documents for tailored questions, and use the built-in chatbot for instant insights. Stay prepared and make every conversation count!"
       >
         <ScreenshotGallery images={zoomScreenshots} />
       </ToolSection>
@@ -122,10 +123,11 @@ const OHTAITools = () => {
         url={toolUrls.idp.url}
         description={
           <>
-            The <strong>Intelligent Document Processing (IDP)</strong> system
-            automates data extraction, classification, and workflow integration,
-            reducing manual effort and improving efficiency for seamless
-            document management.
+            Upload any file, and IDP’s AI instantly classifies it—whether it's a
+            driver’s license, ID, or document. Need details? Extract key
+            information in seconds. Have questions? Our built-in chatbot
+            provides instant answers based on your file. Streamline your
+            document management with smart, AI-driven processing.
           </>
         }
       >
@@ -148,7 +150,7 @@ const OHTAITools = () => {
         url={toolUrls.salesCoach.url}
         id="sales-coach"
         title="Sales Coach"
-        description="The Zoom Landing Page project includes an AI chat within Zoom meetings, providing real-time interaction along with AI-generated suggested questions relevant to the discussion."
+        description="Practice sales calls with AI just like you’re speaking to a real client. Sales Coach analyzes your conversation, evaluates your pitch, and even assesses your body language. At the end of each session, receive a performance ranking with insights to help you close more deals. Elevate your sales skills with smart, real-time coaching!"
       >
         <FeatureCardGrid features={salesCoachFeatures} />
       </ToolSection>
@@ -158,7 +160,7 @@ const OHTAITools = () => {
         bgColor="bg-[#FFE8A138]"
         id="knowledge-management"
         title="Knowledge Management"
-        description="The Zoom Landing Page project includes an AI chat within Zoom meetings, providing real-time interaction along with AI-generated suggested questions relevant to the discussion."
+        description="Upload your sales documents, and let AI do the rest. Knowledge managment processes your PDFs, making them fully searchable. Simply type a question in the search bar, and the AI will instantly retrieve the most relevant answers. No more manual searching—get the insights you need in seconds!"
       >
         <FeatureCardGrid features={knowledgeManagementFeatures} />
       </ToolSection>
@@ -167,7 +169,7 @@ const OHTAITools = () => {
         url={toolUrls.beamCounter.url}
         id="beam-counter"
         title="Beam counter"
-        description="The beam counter app uses AI to detect and count metal beams, improving accuracy and efficiency in construction management."
+        description="Upload an image, and let AI do the counting for you. Beam Counter analyzes your photo, accurately detects beams, and instantly displays the total count. No more manual calculations—get fast, precise results with AI-powered image processing!"
       >
         <FeatureCardGrid features={beamCounterFeatures} />
       </ToolSection>
